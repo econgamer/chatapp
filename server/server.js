@@ -16,14 +16,13 @@ io.on('connection', (socket) => {
   console.log('new user connected');
 
 
-  socket.emit('newMessage', {
-    from: 'admin',
-    text: 'Welcome to my site',
-    createdAt: '321'
-  })
-
-  socket.on('createmessage', (message) => {
+  socket.on('createMessage', (message) => {
     console.log("Message from user: " , message);
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', () => {
