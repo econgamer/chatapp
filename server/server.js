@@ -1,25 +1,40 @@
 const path = require('path');
+const http = require('http');
 const express = require('express');
+const socketIO = require('socket.io');
 
 const publicPath = path.join(__dirname, "../public");
 const port = process.env.PORT || 3000;
 
-const app = express();
+var app = express();
+var server = http.createServer(app);
+var io = socketIO(server);
 
 app.use(express.static(publicPath));
 
-app.set('view engine', 'ejs');
-
-console.log(__dirname + '/../public');
-console.log(publicPath);
+io.on('connection', (socket) => {
+  console.log('new user connected');
 
 
-// app.get('/', (req, res) => {
-//   res.sendFile('index.html');
-// })
+  socket.emit('newMessage', {
+    from: 'admin',
+    text: 'Welcome to my site',
+    createdAt: '321'
+  })
+
+  socket.on('createmessage', (message) => {
+    console.log("Message from user: " , message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnect');
+  });
+
+});
 
 
 
-app.listen(port, () => {
+
+server.listen(port, () => {
   console.log(`Connected on port ${port} succeed`);
 });
