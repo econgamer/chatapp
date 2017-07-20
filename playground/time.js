@@ -10,7 +10,9 @@ var moment = require('moment');
 // var date = moment();
 // console.log(date.format('MMM'));
 
+new Date().getTime()
 
 
-var data = moment();
+var createdAt = 1234;
+var data = moment(createdAt);
 console.log(data.format('h:mm a'));
